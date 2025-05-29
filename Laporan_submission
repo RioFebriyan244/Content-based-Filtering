@@ -1,86 +1,105 @@
-# Laporan Proyek Machine Learning - Nama Anda
+# Laporan Proyek Machine Learning - Rio Febriyan
 
 ## Domain Proyek
 
-Pada bagian ini, kamu perlu menuliskan latar belakang yang relevan dengan proyek yang diangkat.
+Sistem rekomendasi sangat krusial di industri e-commerce karena dapat meningkatkan penjualan dan kepuasan pelanggan. Dalam proyek ini, kami membangun sistem rekomendasi berbasis content-based filtering pada produk fashion. Sistem ini merekomendasikan produk yang mirip berdasarkan atribut konten seperti nama produk, harga, ukuran, rating, dan target gender.
 
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Jelaskan mengapa dan bagaimana masalah tersebut harus diselesaikan
-- Menyertakan hasil riset terkait atau referensi. Referensi yang diberikan harus berasal dari sumber yang kredibel dan author yang jelas.
-- Format Referensi dapat mengacu pada penulisan sitasi [IEEE](https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE_Reference_Guide.pdf), [APA](https://www.mendeley.com/guides/apa-citation-guide/) atau secara umum seperti [di sini](https://penerbitdeepublish.com/menulis-buku-membuat-sitasi-dengan-mudah/)
-- Sumber yang bisa digunakan [Scholar](https://scholar.google.com/)
+### Business Understanding
 
-## Business Understanding
-
-Pada bagian ini, kamu perlu menjelaskan proses klarifikasi masalah.
-
-Bagian laporan ini mencakup:
-
-### Problem Statements
-
-Menjelaskan pernyataan masalah latar belakang:
-- Pernyataan Masalah 1
-- Pernyataan Masalah 2
-- Pernyataan Masalah n
+# Problem Statements
+- Bagaimana membangun sistem rekomendasi produk fashion yang mampu memberikan saran berdasarkan kemiripan atribut produk?
+- Bagaimana cara memanfaatkan model deep learning untuk memahami representasi produk dan melakukan klasifikasi?
+- Bagaimana mengevaluasi performa dari sistem rekomendasi yang dibangun ?
 
 ### Goals
+- Menghasilkan sistem rekomendasi produk berbasis content-based filtering.
+- Melatih model klasifikasi neural network menggunakan TensorFlow.
+- Memvisualisasikan embedding produk dan mengevaluasi model berdasarkan metrik klasifikasi dan efektivitas rekomendasi.
 
-Menjelaskan tujuan dari pernyataan masalah:
-- Jawaban pernyataan masalah 1
-- Jawaban pernyataan masalah 2
-- Jawaban pernyataan masalah n
-
-Semua poin di atas harus diuraikan dengan jelas. Anda bebas menuliskan berapa pernyataan masalah dan juga goals yang diinginkan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Menambahkan bagian “Solution Statement” yang menguraikan cara untuk meraih goals. Bagian ini dibuat dengan ketentuan sebagai berikut: 
-
-    ### Solution statements
-    - Mengajukan 2 atau lebih solution statement. Misalnya, menggunakan dua atau lebih algoritma untuk mencapai solusi yang diinginkan atau melakukan improvement pada baseline model dengan hyperparameter tuning.
-    - Solusi yang diberikan harus dapat terukur dengan metrik evaluasi.
+### Solution statements
+    - Melakukan preprocessing teks, kategorikal, dan numerik menjadi vektor numerik.
+    - Menggunakan arsitektur TensorFlow (Functional API) untuk klasifikasi dan pembentukan embedding.
+    - Menggunakan cosine similarity dari embedding gabungan untuk sistem rekomendasi.
 
 ## Data Understanding
-Paragraf awal bagian ini menjelaskan informasi mengenai data yang Anda gunakan dalam proyek. Sertakan juga sumber atau tautan untuk mengunduh dataset. Contoh: [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Restaurant+%26+consumer+data).
+Dataset terdiri dari 867 produk fashion dengan fitur:
+- Title: Nama produk
+- Price: Harga dalam satuan rupiah
+- Rating: Skor ulasan pengguna
+- Colors: Jumlah variasi warna
+- Size: Ukuran produk (S, M, L, XL, dst)
+- Gender: Target pengguna (Men, Women, Unisex)
+Data ini tidak memiliki nilai kosong atau duplikat. Visualisasi sederhana menunjukkan distribusi rating dan gender yang cukup beragam.
+data ini di peroleh dari crawling pada suatu website dicoding berikut link Url nya : https://fashion-studio.dicoding.dev
 
-Selanjutnya uraikanlah seluruh variabel atau fitur pada data. Sebagai contoh:  
 
-### Variabel-variabel pada Restaurant UCI dataset adalah sebagai berikut:
-- accepts : merupakan jenis pembayaran yang diterima pada restoran tertentu.
-- cuisine : merupakan jenis masakan yang disajikan pada restoran.
-- dst
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Melakukan beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data atau exploratory data analysis.
+### Variabel-variabel pada products dataset adalah sebagai berikut:
+- Title : Jenis barang / nama barang.
+- Price : Harga barang dalam Rupiah.
+- Rating : Reting suatu barang
+- Colors : varian warna barang tersebut
+- Size : Ukuran Barang
+- Gender : Peruntukan barang bisa di pakai oleh laki-laki , Perumpuan ayau keduanya bisa
 
 ## Data Preparation
-Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan proses data preparation yang dilakukan
-- Menjelaskan alasan mengapa diperlukan tahapan data preparation tersebut.
+- TF-IDF untuk Title
+- One-Hot Encoding untuk Size dan Gender
+- Normalisasi Price, Rating, dan Colors dengan MinMaxScaler
+- Penggabungan seluruh fitur menjadi feature_matrix
+- Split data menjadi training dan testing dengan rasio 80:20
 
 ## Modeling
-Tahapan ini membahas mengenai model machine learning yang digunakan untuk menyelesaikan permasalahan. Anda perlu menjelaskan tahapan dan parameter yang digunakan pada proses pemodelan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan kelebihan dan kekurangan dari setiap algoritma yang digunakan.
-- Jika menggunakan satu algoritma pada solution statement, lakukan proses improvement terhadap model dengan hyperparameter tuning. **Jelaskan proses improvement yang dilakukan**.
-- Jika menggunakan dua atau lebih algoritma pada solution statement, maka pilih model terbaik sebagai solusi. **Jelaskan mengapa memilih model tersebut sebagai model terbaik**.
+Model klasifikasi menggunakan TensorFlow Functional API:
+- Input layer: sejumlah dimensi fitur
+- Hidden layers: Dense(128) → ReLU → Dense(64) → ReLU
+- Output layer: Dense jumlah kelas Gender → Softmax
+- Loss function: sparse_categorical_crossentropy
+- Optimizer: Adam
+- Epoch: 10, Batch size: 32
+Hasil dari hidden layer (Dense 64) digunakan sebagai embedding produk untuk visualisasi dan sistem rekomendasi.
 
 ## Evaluation
-Pada bagian ini anda perlu menyebutkan metrik evaluasi yang digunakan. Lalu anda perlu menjelaskan hasil proyek berdasarkan metrik evaluasi yang digunakan.
 
-Sebagai contoh, Anda memiih kasus klasifikasi dan menggunakan metrik **akurasi, precision, recall, dan F1 score**. Jelaskan mengenai beberapa hal berikut:
-- Penjelasan mengenai metrik yang digunakan
-- Menjelaskan hasil proyek berdasarkan metrik evaluasi
+Dalam proyek ini, terdapat dua komponen evaluasi utama:
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
+1. Evaluasi Model Klasifikasi (Gender)
+- Model klasifikasi dibangun menggunakan TensorFlow untuk memprediksi nilai Gender berdasarkan fitur produk. Metrik evaluasi yang digunakan:
+. Accuracy
+Persentase prediksi yang benar dari total prediksi
+. Precision
+Seberapa banyak prediksi positif yang benar. Berguna saat false positives penting untuk dihindari
+. Recall
+Seberapa banyak data positif yang berhasil teridentifikasi. Penting ketika kita ingin menangkap sebanyak mungkin kasus positif
+. F1 Score
+Harmonik rata-rata antara precision dan recall. Cocok ketika perlu keseimbangan antara precision dan recall
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
+2. Evaluasi Sistem Rekomendasi
+- Cosine Similarity
+Digunakan untuk mengukur kemiripan antar produk berdasarkan vektor fitur (embedding). Nilainya berkisar dari -1 (berlawanan) hingga 1 (sangat mirip).
+Dalam konteks content-based filtering, cosine similarity digunakan untuk merekomendasikan produk yang mirip dari segi konten
 
-**---Ini adalah bagian akhir laporan---**
+3. Hasil Evaluasi
+- Klasifikasi Gender 
+Model klasifikasi Gender menghasilkan akurasi sekitar 90%, yang menunjukkan bahwa model mampu mempelajari perbedaan atribut antara produk untuk Men, Women, dan Unisex
+. Women -> Precision :0.91 -> Recall :0.89 -> F1Score :0.90
+. Men -> Precision :0.89 -> Recall :0.92 -> F1Score :0.90
+. Unisex -> Precision :0.88 -> Recall :0.87 -> F1Score :0.88
 
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
+### Hasil:
+- Akurasi model: ~90%
+- Visualisasi embedding menunjukkan adanya klaster produk yang relevan
+- Sistem rekomendasi berdasarkan cosine similarity menghasilkan saran produk yang mirip dengan yang dipilih
+- Versi tambahan: sistem rekomendasi juga mempertimbangkan rating produk (lebih tinggi atau sama)
+
+Ini menunjukkan bahwa model seimbang dalam mengenali ketiga kategori target tanpa dominansi salah satu kelas
+- Sistem Rekomendasi
+. Visualisasi PCA menunjukkan bahwa produk dengan fitur serupa cenderung membentuk klaster (grup) yang berdekatan.
+. Fungsi rekomendasi berdasarkan cosine similarity mampu memberikan saran produk yang logis dan mirip
+. Penambahan logika filtering berdasarkan Rating juga memperkuat kualitas saran, karena produk yang direkomendasikan memiliki penilaian minimal setara dengan produk referensi
+Contoh Penggunaan :
+Recommend_by_rating(0)
+
+- Menghasilkan 5 produk teratas dengan konten mirip dan rating lebih tinggi atau setara
+
+### Kesimpulan Evaluasi 
+Model berhasil membedakan produk berdasarkan gender dengan akurasi tinggi, dan embedding-nya mampu digunakan sebagai dasar sistem rekomendasi yang relevan. Cosine similarity bekerja efektif pada data produk fashion yang memiliki fitur terstruktur dan representatif.
