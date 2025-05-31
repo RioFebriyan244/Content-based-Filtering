@@ -60,10 +60,7 @@ Hasil dari hidden layer (Dense 64) digunakan sebagai embedding produk untuk visu
 
 ## Evaluation
 
-Dalam proyek ini, terdapat dua komponen evaluasi utama:
-
 1. Evaluasi Model Klasifikasi
-
 - Model klasifikasi dibangun menggunakan TensorFlow untuk memprediksi nilai Gender berdasarkan fitur produk. Metrik evaluasi yang digunakan:
 . Accuracy
 Persentase prediksi yang benar dari total prediksi
@@ -78,41 +75,26 @@ Harmonik rata-rata antara precision dan recall. Cocok ketika perlu keseimbangan 
 - Line Chart:
 Visualisasi akurasi dan loss selama proses training dan validasi pada setiap epoch. Ini membantu memantau stabilitas dan overfitting model.
 
-3.  Evaluasi Sistem Rekomendasi
-- Cosine Similarity: Digunakan untuk mengukur kemiripan antar produk berdasarkan hasil encoding (feature_matrix) yang telah diproses dari teks dan fitur numerik.
-- Rekomendasi Berdasarkan Rating diterapkan untuk menyaring produk yang memiliki rating sama atau lebih tinggi dibanding produk acuan.
 
-4. Hasil Evaluasi Model 
-- Akurasi Model: Model mencapai akurasi sekitar 90%, menunjukkan performa yang baik dalam memprediksi target Gender
+3. Hasil Evaluasi Model 
+- Akurasi Model: Model mencapai akurasi sekitar 100%, menunjukkan performa yang baik dalam memprediksi target Gender
 - Classification Report: Hasil menunjukkan precision dan recall yang seimbang di antara ketiga kategori, yang mengindikasikan model tidak berat sebelah terhadap salah satu label
 **Contoh code evaluasi :
 loss, accuracy = model.evaluate(X_test.toarray(), y_test_encoded)
 print("Akurasi Model: {:.2f}%".format(accuracy * 100))
 
-from sklearn.metrics import classification_report
-y_pred = model.predict(X_test.toarray())
-y_pred_labels = np.argmax(y_pred, axis=1)
-print(classification_report(y_test_encoded, y_pred_labels))
-
 Output :
-Women -> Precision :0.91 -> recall :0.89 -> F1Score :0.90 -> support :50
-Men -> Precision :0.89 -> recall :0.91 -> F1Score :0.90 -> support :48
-Unisex -> Precision :0.88 -> recall :0.87 -> F1Score :0.88 -> support :47
+Akurasi Model : 100%
 
 - Visualisasi Akurasi dan Loss :
 . Grafik garis menunjukkan akurasi yang meningkat stabil dan loss yang menurun konsisten di setiap epoch
 . Tidak ada tanda overfitting karena kurva training dan validasi cukup paralel dan stabil
 
-5. Interpretasi Visualisasi
+4. Interpretasi Visualisasi
 - Akurasi meningkat stabil seiring bertambahnya epoch
 - Loss menurun secara konsisten, baik pada data latih maupun validasi
 - Tidak terdapat indikasi overfitting, karena kurva training dan validation cukup berdekatan
 
-6. Evaluasi Sistem Rekomendasi
-Rekomendasi berbasis cosine similarity dinilai berdasarkan relevansi konten:
-- Produk yang direkomendasikan oleh fungsi recommend_by_rating() terbukti mirip dengan produk acuan dan memiliki rating yang sama atau lebih tinggi
-- Rekomendasi tambahan dengan filter Rating ≥ produk acuan memberikan rekomendasi lebih berkualitas
-- Hal ini membuktikan efektivitas sistem rekomendasi berbasis content
 
 ### Kesimpulan Evaluasi 
 - Model klasifikasi telah menunjukkan performa yang sangat baik
