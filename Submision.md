@@ -44,7 +44,7 @@ data ini di peroleh dari crawling pada suatu website dicoding berikut link Url n
 
 - TF-IDF untuk Title
 - One-Hot Encoding untuk Size dan Gender
-- Mengubah Size & Genden menjadi data Numerik
+- Mengubah Size & Gender menjadi data Numerik
   . Kolom Gender merupakan label kategorikal (Men, Women, Unisex) yang tidak bisa langsung digunakan sebagai target numerik dalam training model
   . Oleh karena itu, label ini diubah menjadi angka menggunakan pemetaan manual (dictionary label_map) agar bisa digunakan dengan sparse_categorical_crossentropy
 - Normalisasi Price, Rating, dan Colors dengan MinMaxScaler
@@ -102,8 +102,8 @@ Rekomendasi terbukti relevan karena produk yang disarankan berasal dari kategori
 - Model klasifikasi menggunakan TensorFlow Functional API telah diuji dengan :
  . Akurasi Pelatihan dan Validasi mencapai 100% mulai dari epoch ke-2 hingga ke-10
  . Loss menurun drastis dari :
-  . Training: 1.0220 → 0.0014
-  . Validasi: 0.7121 → 0.0022
+  . Training: 1.0306 → 0.0012
+  . Validasi: 0.7369 → 0.0018
 - Kurva akurasi dan loss pada pelatihan dan validasi nyaris identik dan stabil
  . Grafik Akurasi menunjukkan peningkatan pesat dan stabil
  . Grafik Loss menampilkan penurunan tajam dan stabil di titik rendah
