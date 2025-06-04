@@ -90,9 +90,67 @@ Grafik menunjukkan peningkatan akurasi yang sangat cepat dan penurunan loss yang
 
 ### 5.  Sistem Rekomendasi Content-Based Filtering
 
-Sistem rekomendasi dibangun berdasarkan kemiripan fitur produk menggunakan cosine similarity. Produk yang memiliki rating sama atau lebih tinggi dari produk referensi akan direkomendasikan.
+- Konsep Dasar
+Sistem ini merekomendasikan produk berdasarkan kemiripan fitur dengan produk yang sedang dilihat/dipilih oleh pengguna. Pendekatan Content-Based Filtering memanfaatkan informasi dari produk itu sendiri (misalnya: judul, harga, rating, warna, ukuran, dll) untuk menghitung kemiripan antar produk.
 
-Rekomendasi terbukti relevan karena produk yang disarankan berasal dari kategori yang sama dan memiliki kualitas (rating) tinggi.
+- Penjelasan Fungsi recommend_by_rating()
+  ```
+  python
+  def recommend_by_rating(product_index, top_n=5):
+    similarity_matrix = cosine_similarity(feature_matrix)
+    similarity_scores = list(enumerate(similarity_matrix[product_index]))
+    similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+    similar_indices = [i for i, score in similarity_scores[1:] if df.iloc[i]['Rating'] >= df.iloc[product_index]['Rating']]
+    return df.iloc[similar_indices[:top_n]][['Title', 'Price', 'Rating']]
+print("\nRekomendasi produk mirip dengan rating setara atau lebih tinggi:")
+print(recommend_by_rating(0))
+```
+
+```
+Output :
+
+Rekomendasi produk mirip dengan rating setara atau lebih tinggi:
+           Title      Price  Rating
+598  T-shirt 692  1416480.0     4.1
+754  T-shirt 872  1343680.0     4.3
+520  T-shirt 602  2260960.0     4.4
+832  T-shirt 962  2887840.0     4.1
+338  T-shirt 392  1226080.0     4.4
+
+```
+- Langkah-langkah:
+
+ 1. Menghitung Kemiripan
+   . cosine_similarity(feature_matrix) digunakan untuk menghitung skor kemiripan antar produk berdasarkan representasi fitur numerik (embedding atau vektor numerik dari fitur).
+
+2. Mengambil Produk yang Mirip
+   . Produk diurutkan berdasarkan skor kemiripan tertinggi dengan produk referensi (product_index)
+
+3. Filtering Berdasarkan Rating
+   . Hanya produk yang memiliki rating sama atau lebih tinggi dari produk yang dimaksud yang akan diambil sebagai rekomendasi
+
+4. Mengambil Top-N Rekomendasi
+   . Fungsi mengembalikan 5 produk paling mirip dan dengan rating ≥ produk awal.
+
+- Fitur yang Digunakan
+ . feature_matrix: representasi fitur gabungan dari produk, kemungkinan hasil encoding dari kolom seperti
+  . Judul
+  . Warna
+  . Ukuran
+  . Gender
+  . Harga ( Price ) dan Rating
+
+- Kelebihan
+ . Tidak bergantung pada data pengguna atau interaksi historis (cocok untuk cold start)
+ . Rekomendasi tetap relevan meskipun pengguna baru
+
+- Keterbatasan
+ . Tidak bisa menangkap selera pengguna jika hanya berdasarkan satu produk
+ . Terbatas pada produk yang mirip secara fitur — tidak bisa merekomendasikan hal “berbeda tapi disukai pengguna lain”
+
+- Kesimpulan
+Rekomendasi terbukti relevan karena produk yang disarankan berasal dari kategori yang sama dan memiliki kualitas (rating) tinggi
+Sistem rekomendasi yang dibangun menggunakan pendekatan Content-Based Filtering, di mana kemiripan antar produk dihitung menggunakan Cosine Similarity dari representasi fitur produk. Model ini kemudian menyaring produk-produk serupa yang memiliki rating setara atau lebih tinggi, dan mengembalikan beberapa produk teratas sebagai hasil rekomendasi
 
 ---
 
